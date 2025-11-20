@@ -1,0 +1,60 @@
+@model IEnumerable<CarListing>
+@{
+    ViewData["Title"] = "Моите обяви";
+}
+
+<section class="form-header">
+    <h1 class="display-6 text-emerald mb-2">Активни обяви</h1>
+    <p class="text-muted">Следете всички автомобили, които предлагате. Можете да редактирате или обновявате по всяко време.</p>
+</section>
+
+@if (Model.Any())
+{
+    <div class="table-responsive glass-card p-3">
+        <table class="table table-dark align-middle">
+            <thead>
+                <tr>
+                    <th>Заглавие</th>
+                    <th>Марка</th>
+                    <th>Модел</th>
+                    <th>Година</th>
+                    <th>Цена</th>
+                    <th>Публикувана</th>
+                    <th class="text-end">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var listing in Model)
+                {
+                    <tr>
+                        <td>@listing.Title</td>
+                        <td>@listing.Make</td>
+                        <td>@listing.Model</td>
+                        <td>@listing.Year</td>
+                        <td>@listing.Price.ToString("C0")</td>
+                        <td>@listing.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
+                        <td class="text-end">
+                            <div class="d-flex gap-2 justify-content-end flex-wrap">
+                                <a class="btn btn-sm btn-outline-light" asp-action="Details" asp-route-id="@listing.Id">Виж</a>
+                                <a class="btn btn-sm btn-outline-emerald" asp-action="Edit" asp-route-id="@listing.Id">Редакция</a>
+                                <form asp-action="Delete" asp-route-id="@listing.Id" method="post" class="d-inline" onsubmit="return confirm('Сигурни ли сте, че искате да изтриете обявата?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger">Изтрий</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="empty-state glass-card text-center p-5">
+        <h3>Няма обяви</h3>
+        <p class="text-muted mb-3">Вашият гараж е празен. Добавете първата си оферта.</p>
+        <a class="btn btn-danger" asp-action="Create">Нова обява</a>
+    </div>
+}
+

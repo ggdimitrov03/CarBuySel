@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CarBuySell</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CarBuySel.styles.css" asp-append-version="true" />
+</head>
+<body class="bg-carbon text-light">
+    <div class="noise-overlay"></div>
+    <header class="shadowed-header">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="text-emerald">Car</span><span class="text-danger">Buy</span><span class="text-light">Sel</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+                        aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navMenu">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Начало</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Cars" asp-action="Index">Обяви</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Cars" asp-action="Create">Добави автомобил</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Cars" asp-action="MyListings">Моите обяви</a>
+                        </li>
+                    </ul>
+                    <div class="nav-actions d-flex align-items-center gap-3 flex-wrap">
+                        <button id="themeToggle" class="btn btn-sm btn-outline-light theme-toggle" type="button" aria-label="Смяна на тема">
+                            <span class="theme-toggle__icon" aria-hidden="true"></span>
+                            <span class="theme-toggle__label">Тема</span>
+                        </button>
+                        @await Html.PartialAsync("_LoginPartial")
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="page-shell container py-4">
+        <main id="pageContent" role="main" class="page-transition">
+            @if (TempData["StatusMessage"] is string statusMessage)
+            {
+                <div class="alert alert-success neon-border mb-4" role="alert">
+                    @statusMessage
+                </div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer-glow border-top">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <span>&copy; @DateTime.UtcNow.Year CarBuySel</span>
+            <a class="link-underline" asp-controller="Home" asp-action="Privacy">Поверителност</a>
+        </div>
+    </footer>
+    <div id="lightbox" class="lightbox" hidden>
+        <button class="lightbox__close" type="button" data-lightbox-close aria-label="Close image">&times;</button>
+        <img alt="Zoomed listing photo" />
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

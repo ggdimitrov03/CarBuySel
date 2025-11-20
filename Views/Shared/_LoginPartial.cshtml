@@ -1,0 +1,29 @@
+@using CarBuySel.Models
+@inject SignInManager<ApplicationUser> SignInManager
+
+<ul class="navbar-nav auth-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    var displayName = User.Claims.FirstOrDefault(c => c.Type == "display-name")?.Value ?? User.Identity?.Name ?? "Член";
+    <li class="nav-item me-3 d-flex align-items-center">
+        <span class="badge bg-gradient text-uppercase">
+            @displayName
+        </span>
+    </li>
+    <li class="nav-item">
+        <form class="d-inline" asp-controller="Account" asp-action="Logout" method="post">
+            <button type="submit" class="btn btn-sm btn-outline-light">Изход</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="btn btn-sm btn-outline-emerald me-2" asp-controller="Account" asp-action="Login">Вход</a>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-sm btn-danger" asp-controller="Account" asp-action="Register">Регистрация</a>
+    </li>
+}
+</ul>
+

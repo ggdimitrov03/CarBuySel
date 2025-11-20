@@ -1,0 +1,181 @@
+﻿@using System.Collections.Generic
+@{
+    ViewData["Title"] = "CarBuySel";
+
+    var categories = new[] { "SUV", "Седан", "Електрически", "Луксозни", "Хибрид", "Перформанс" };
+
+    var featuredInventory = new[]
+    {
+        new { Title = "2023 Audi RS7 Performance", Meta = "12 400 км · Автоматик", Price = "129 000 €", Badge = "Ново", Image = "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80" },
+        new { Title = "2022 BMW i4 M50", Meta = "8 200 км · 4х4", Price = "74 900 €", Badge = "Електрически", Image = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80" },
+        new { Title = "2021 Mercedes GLE Coupe", Meta = "26 000 км · AMG пакет", Price = "84 500 €", Badge = "Сертифициран", Image = "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80" },
+        new { Title = "2020 Porsche Taycan Turbo", Meta = "34 800 км · Launch Control", Price = "115 000 €", Badge = "Намаление", Image = "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80" },
+        new { Title = "2024 Range Rover Sport", Meta = "1 100 км · Dynamic Pack", Price = "142 000 €", Badge = "В транзит", Image = "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=900&q=80" },
+        new { Title = "2019 Tesla Model S Performance", Meta = "58 000 км · Enhanced AP", Price = "69 500 €", Badge = "Популярна", Image = "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=900&q=80" }
+    };
+
+    var testimonials = new[]
+    {
+        new { Quote = "„Публикувах обявата си на обяд и до вечерта имах две потвърдени оферти. Усеща се като премиум услуга.“", Name = "Мила Петкова", Role = "Продавач, София" },
+        new { Quote = "„Филтрите са логични, галерията е бърза, а купувачите са проверени. Чувства се като луксозно шоурум изживяване.“", Name = "Емил Стоянов", Role = "Собственик на M3" }
+    };
+
+    var partners = new[] { "AutoTrust", "MotorCheck", "DriveSecure", "GreenLight", "EuroVIN" };
+
+    var isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+}
+
+<section class="home-hero glass-card">
+    <div class="home-hero__content">
+        <p class="eyebrow text-emerald">Проверен автомобилен маркетплейс</p>
+        <h1 class="display-4 fw-bold">Намерете следващия си автомобил с увереност</h1>
+        <p class="lead text-muted">
+            Търсете по начин на живот, сравнявайте селектирани предложения и получавайте персонална помощ от доверени партньори. Всяка обява е удостоверена и оценена по състояние.
+        </p>
+        <form asp-controller="Cars" asp-action="Index" method="get" class="hero-search">
+            <div class="hero-search__fields">
+                <label class="form-label text-uppercase small" for="heroKeyword">Ключова дума</label>
+                <input id="heroKeyword" name="searchTerm" class="form-control form-control-lg" placeholder="Модел, ниво на оборудване..." />
+            </div>
+            <div class="hero-search__fields">
+                <label class="form-label text-uppercase small" for="heroMake">Марка</label>
+                <input id="heroMake" name="make" class="form-control form-control-lg" placeholder="Audi, BMW, Tesla..." />
+            </div>
+            <div class="hero-search__fields">
+                <label class="form-label text-uppercase small" for="heroMaxPrice">Максимална цена (€)</label>
+                <input id="heroMaxPrice" name="maxPrice" type="number" min="0" step="1000" class="form-control form-control-lg" placeholder="80 000" />
+            </div>
+            <button class="btn btn-emerald hero-search__submit" type="submit">Търси автомобили</button>
+        </form>
+        <div class="category-chips" role="list">
+            @foreach (var category in categories)
+            {
+                <a class="category-chip" role="listitem"
+                   href="@Url.Action("Index", "Cars", new { searchTerm = category })"
+                   data-chip="@category">
+                    <span>@category</span>
+                </a>
+            }
+        </div>
+    </div>
+    <div class="home-hero__visual">
+        <div class="hero-glow"></div>
+        <div class="hero-stats glass-card">
+            <div>
+                <span class="stat-number">4.9/5</span>
+                <p>Среден рейтинг на продавачите</p>
+            </div>
+            <div>
+                <span class="stat-number">32K+</span>
+                <p>Проверени автомобила годишно</p>
+            </div>
+            <div>
+                <span class="stat-number">12 мин</span>
+                <p>Време за одобрение</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow text-emerald">Акцент от обявите</p>
+            <h2 class="h3 fw-bold">Подбрани предложения тази седмица</h2>
+        </div>
+        <a class="btn btn-outline-emerald btn-sm" asp-controller="Cars" asp-action="Index">Всички автомобили</a>
+    </div>
+    <div class="featured-grid">
+        @foreach (var car in featuredInventory)
+        {
+            <article class="feature-card hover-card">
+                <div class="feature-card__image" style="background-image: url('@car.Image');">
+                    <span class="badge-pill">@car.Badge</span>
+                </div>
+                <div class="feature-card__body">
+                    <div>
+                        <h3 class="h5 mb-1">@car.Title</h3>
+                        <p class="feature-card__meta">@car.Meta</p>
+                    </div>
+                    <div class="feature-card__footer">
+                        <span class="feature-card__price">@car.Price</span>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-sm btn-outline-light" asp-controller="Cars" asp-action="Index">Сравни</a>
+                            <a class="btn btn-sm btn-danger" asp-controller="Cars" asp-action="Index">Виж</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="sell-card glass-card">
+    <div class="sell-card__content">
+        <p class="eyebrow text-emerald">Продайте по-умно</p>
+        <h2 class="h3 fw-bold">Публикувайте обява с моментална оценка</h2>
+        <p class="text-muted">Достъп до пазарни данни, насоки за фото сесия и verified купувачи за по-малко от 5 минути.</p>
+        <div class="step-list">
+            <div class="step">
+                <span class="step__number">1</span>
+                <div>
+                    <strong>Качвате снимки</strong>
+                    <p>Получавате съвети за кадрите, които продават.</p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step__number">2</span>
+                <div>
+                    <strong>Моментална оценка</strong>
+                    <p>Живи пазарни данни + доклад за състояние.</p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step__number">3</span>
+                <div>
+                    <strong>Получавате оферти</strong>
+                    <p>Поканете проверени купувачи или ни поверете продажбата.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sell-card__cta">
+        <p class="eyebrow text-emerald">Готови ли сте?</p>
+        <h3 class="h4 mb-3 text-light">Консиерж подкрепа</h3>
+        <a class="btn btn-danger btn-lg w-100 mb-2" asp-controller="Cars" asp-action="Create">Започни продажба</a>
+        @if (!isAuthenticated)
+        {
+            <a class="btn btn-outline-light btn-lg w-100" asp-controller="Account" asp-action="Register">Създай профил</a>
+        }
+        else
+        {
+            <a class="btn btn-outline-light btn-lg w-100" asp-controller="Cars" asp-action="MyListings">Моите обяви</a>
+        }
+    </div>
+</section>
+
+<section class="trust-panel home-section">
+    <div class="trust-panel__card glass-card">
+        <p class="eyebrow text-emerald">Доверие</p>
+        <h2 class="h4">Шофьорите ни оценяват с 4.9/5</h2>
+        <p class="text-muted mb-4">От електромобили до класики – CarBuySel поема сложното и ви оставя само удоволствието.</p>
+        <div class="logo-row">
+            @foreach (var partner in partners)
+            {
+                <span>@partner</span>
+            }
+        </div>
+    </div>
+    <div class="testimonial-grid">
+        @foreach (var item in testimonials)
+        {
+            <article class="testimonial-card glass-card">
+                <p class="mb-3">@item.Quote</p>
+                <div class="testimonial-card__author">
+                    <strong>@item.Name</strong>
+                    <span>@item.Role</span>
+                </div>
+            </article>
+        }
+    </div>
+</section>

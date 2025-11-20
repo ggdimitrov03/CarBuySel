@@ -1,0 +1,114 @@
+@model CarSearchViewModel
+@{
+    ViewData["Title"] = "Маркетплейс";
+    var isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+}
+
+<section class="hero-panel mb-5">
+    <div class="hero-content">
+        <p class="eyebrow text-emerald">Селектирани предложения</p>
+        <h1 class="display-4 fw-bold">
+            Купувайте и продавайте уверено
+        </h1>
+        <p class="lead text-muted">
+            Сравнявайте версии, следете цените и публикувайте собствена обява за секунди. Всеки профил има неограничени обяви и достъп в реално време.
+        </p>
+        <div class="d-flex gap-3 flex-wrap">
+            <a class="btn btn-danger btn-lg" asp-action="Create">Добави автомобил</a>
+            @if (!isAuthenticated)
+            {
+                <a class="btn btn-outline-emerald btn-lg" asp-controller="Account" asp-action="Register">Създай профил</a>
+            }
+            else
+            {
+                <a class="btn btn-outline-emerald btn-lg" asp-controller="Cars" asp-action="MyListings">Моите обяви</a>
+            }
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="hero-glow"></div>
+        <span class="speed-line"></span>
+        <span class="speed-line delay-1"></span>
+        <span class="speed-line delay-2"></span>
+    </div>
+</section>
+
+<section class="search-card neon-border mb-4">
+    <form method="get" asp-action="Index" class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label text-uppercase small" for="searchTerm">Ключова дума</label>
+            <input class="form-control" id="searchTerm" name="searchTerm" value="@Model.SearchTerm" placeholder="GTI, Turbo, AWD..." />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label text-uppercase small" for="make">Марка</label>
+            <input class="form-control" id="make" name="make" value="@Model.Make" placeholder="Audi" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label text-uppercase small" for="model">Модел</label>
+            <input class="form-control" id="model" name="model" value="@Model.Model" placeholder="RS7" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label text-uppercase small" for="year">Година</label>
+            <input class="form-control" id="year" name="year" type="number" value="@(Model.Year?.ToString())" min="1950" max="2100" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label text-uppercase small" for="maxPrice">Макс. цена (€)</label>
+            <input class="form-control" id="maxPrice" name="maxPrice" type="number" step="500" min="0" value="@(Model.MaxPrice?.ToString())" />
+        </div>
+        <div class="col-md-1 d-grid">
+            <button class="btn btn-emerald">Търси</button>
+        </div>
+    </form>
+</section>
+
+<section class="car-grid">
+    @if (Model.Listings.Any())
+    {
+        <div class="row g-4">
+            @foreach (var listing in Model.Listings)
+            {
+                var heroImage = listing.Images?.OrderBy(image => image.SortOrder).FirstOrDefault()?.Path;
+                var backgroundStyle = !string.IsNullOrWhiteSpace(heroImage)
+                    ? $"url('{Url.Content(heroImage!)}')"
+                    : "linear-gradient(135deg, rgba(220,38,38,.8), rgba(16,185,129,.6))";
+                <div class="col-md-6 col-xl-4">
+                    <article class="car-card glass-card h-100">
+                        <div class="car-card__media" style="background-image: @backgroundStyle;">
+                            <div class="price-tag">@listing.Price.ToString("C0")</div>
+                        </div>
+                        <div class="car-card__body">
+                            <p class="text-uppercase small text-muted mb-1">@listing.Make</p>
+                            <h2 class="h4">@listing.Title</h2>
+                            <p class="car-meta mb-2">
+                                <span>@listing.Model</span>
+                                <span>@listing.Year</span>
+                            </p>
+                            <p class="car-desc">
+                                @(listing.Description.Length <= 140
+                                    ? listing.Description
+                                    : listing.Description[..140] + "…")
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="owner-pill">
+                                    <span>@(listing.Owner?.DisplayName ?? "Продавач")</span>
+                                </div>
+                                <a class="btn btn-sm btn-outline-emerald" asp-action="Details" asp-route-id="@listing.Id">
+                                    Виж обява
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state glass-card text-center p-5">
+            <h3 class="text-emerald">Няма обяви</h3>
+            <p class="text-muted mb-4">Бъдете първият, който предлага автомобил тук.</p>
+            <a class="btn btn-danger" asp-action="Create">Добави обява</a>
+        </div>
+    }
+</section>
+
