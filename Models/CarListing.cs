@@ -32,5 +32,68 @@ public class CarListing
     public ApplicationUser? Owner { get; set; }
 
     public ICollection<CarImage> Images { get; set; } = new List<CarImage>();
+
+    [StringLength(200)]
+    public string? SpecEngine { get; set; }
+
+    [StringLength(200)]
+    public string? SpecPower { get; set; }
+
+    [StringLength(200)]
+    public string? SpecEconomy { get; set; }
+
+    [StringLength(200)]
+    public string? SpecTransmission { get; set; }
+
+    [StringLength(200)]
+    public string? SpecExterior { get; set; }
+
+    [StringLength(200)]
+    public string? SpecInterior { get; set; }
+
+    [StringLength(200)]
+    public string? SpecAssist { get; set; }
+
+    [StringLength(200)]
+    public string? SpecConnectivity { get; set; }
+
+    [StringLength(120)]
+    public string? History1Title { get; set; }
+
+    [StringLength(200)]
+    public string? History1Subtitle { get; set; }
+
+    [StringLength(60)]
+    public string? History1Date { get; set; }
+
+    [StringLength(120)]
+    public string? History2Title { get; set; }
+
+    [StringLength(200)]
+    public string? History2Subtitle { get; set; }
+
+    [StringLength(60)]
+    public string? History2Date { get; set; }
+
+    [StringLength(120)]
+    public string? History3Title { get; set; }
+
+    [StringLength(200)]
+    public string? History3Subtitle { get; set; }
+
+    [StringLength(60)]
+    public string? History3Date { get; set; }
+
+    [StringLength(200)]
+    public string? Condition1 { get; set; }
+
+    [StringLength(200)]
+    public string? Condition2 { get; set; }
+
+    [StringLength(200)]
+    public string? Condition3 { get; set; }
+
+    [StringLength(200)]
+    public string? Condition4 { get; set; }
 }
 

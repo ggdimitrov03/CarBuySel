@@ -14,7 +14,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand fw-bold text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">
-                    <span class="text-emerald">Car</span><span class="text-danger">Buy</span><span class="text-light">Sel</span>
+                    <span class="text-light">Car</span><span class="text-emerald">Buy</span><span class="text-danger">Sell</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
                         aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 
     <footer class="footer-glow border-top">
         <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
-            <span>&copy; @DateTime.UtcNow.Year CarBuySel</span>
+            <span>&copy; @DateTime.UtcNow.Year <span class="text-light">Car</span><span class="text-emerald">Buy</span><span class="text-danger">Sell</span></span>
             <a class="link-underline" asp-controller="Home" asp-action="Privacy">Поверителност</a>
         </div>
     </footer>

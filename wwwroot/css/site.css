@@ -29,6 +29,74 @@
   --pill-bg: rgba(15, 23, 42, 0.08);
 }
 
+/* Override Bootstrap text utilities in light mode */
+:root[data-theme="light"] .text-light,
+:root[data-theme="light"] .text-white {
+  color: var(--text-primary) !important;
+}
+
+/* Ensure navbar brand "Car" is dark in light mode */
+:root[data-theme="light"] .navbar-brand .text-light {
+  color: var(--text-primary) !important;
+}
+
+/* Override navbar-dark styles in light mode */
+:root[data-theme="light"] .navbar-dark .navbar-brand,
+:root[data-theme="light"] .navbar-dark .navbar-nav .nav-link,
+:root[data-theme="light"] .navbar-dark .navbar-text {
+  color: var(--text-primary) !important;
+}
+
+:root[data-theme="light"] .navbar-dark .navbar-nav .nav-link:hover,
+:root[data-theme="light"] .navbar-dark .navbar-nav .nav-link:focus {
+  color: var(--text-primary) !important;
+}
+
+/* Ensure all text elements use dark color in light mode */
+:root[data-theme="light"] p,
+:root[data-theme="light"] h1,
+:root[data-theme="light"] h2,
+:root[data-theme="light"] h3,
+:root[data-theme="light"] h4,
+:root[data-theme="light"] h5,
+:root[data-theme="light"] h6,
+:root[data-theme="light"] span,
+:root[data-theme="light"] div,
+:root[data-theme="light"] li,
+:root[data-theme="light"] td,
+:root[data-theme="light"] th,
+:root[data-theme="light"] label {
+  color: var(--text-primary);
+}
+
+/* Override specific elements that might have light colors */
+:root[data-theme="light"] .text-muted {
+  color: var(--text-muted) !important;
+}
+
+/* Ensure alerts, badges, and cards have dark text in light mode */
+:root[data-theme="light"] .alert,
+:root[data-theme="light"] .badge,
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .glass-card {
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .alert-success {
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .btn-outline-light {
+  color: var(--text-primary);
+  border-color: var(--carbon-border);
+}
+
+:root[data-theme="light"] .btn-outline-light:hover {
+  background-color: var(--carbon-soft);
+  color: var(--text-primary);
+  border-color: var(--carbon-border);
+}
+
 html, body {
   min-height: 100%;
   background: var(--carbon);
@@ -147,6 +215,86 @@ textarea:focus {
 
 .navbar {
   padding: 1rem 0;
+}
+
+.navbar-brand {
+  position: relative;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+.navbar-brand span {
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  animation: logoGlow 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 3px currentColor);
+}
+
+.navbar-brand span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.navbar-brand span:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.navbar-brand span:nth-child(3) {
+  animation-delay: 2s;
+}
+
+.navbar-brand:hover span {
+  transform: translateY(-2px);
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+}
+
+.navbar-brand:hover span:nth-child(1) {
+  animation: logoPulse 0.6s ease-in-out infinite;
+}
+
+.navbar-brand:hover span:nth-child(2) {
+  animation: logoPulse 0.6s ease-in-out infinite 0.2s;
+}
+
+.navbar-brand:hover span:nth-child(3) {
+  animation: logoPulse 0.6s ease-in-out infinite 0.4s;
+}
+
+.navbar-brand:active {
+  transform: scale(0.98);
+}
+
+.navbar-brand:active span {
+  transform: translateY(0) scale(0.95);
+  animation: none;
+}
+
+@keyframes logoGlow {
+  0%, 100% {
+    text-shadow: 0 0 3px currentColor;
+    filter: drop-shadow(0 0 3px currentColor);
+    opacity: 1;
+  }
+  50% {
+    text-shadow: 0 0 8px currentColor, 0 0 12px currentColor;
+    filter: drop-shadow(0 0 8px currentColor);
+    opacity: 0.95;
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: translateY(-2px) scale(1);
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  }
+  50% {
+    transform: translateY(-4px) scale(1.05);
+    text-shadow: 0 0 15px currentColor, 0 0 30px currentColor, 0 0 40px currentColor;
+  }
 }
 
 .navbar .nav-link {
@@ -626,6 +774,10 @@ body.is-transitioning .page-transition {
   .details-summary {
     order: 2;
   }
+
+  .gallery-nav {
+    display: none;
+  }
 }
 
 .car-grid .car-card {
@@ -824,9 +976,49 @@ body.lightbox-open {
 
 .gallery-main__img {
   width: 100%;
-  height: 360px;
+  height: 560px;
   object-fit: cover;
   cursor: zoom-in;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.gallery-main__img.fade-out {
+  opacity: 0;
+}
+
+.gallery-main__img.fade-in {
+  opacity: 1;
+}
+
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(5, 6, 7, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background var(--transition-speed), transform var(--transition-speed);
+}
+
+.gallery-nav:hover {
+  background: rgba(220, 38, 38, 0.8);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.gallery-nav--prev {
+  left: 1rem;
+}
+
+.gallery-nav--next {
+  right: 1rem;
 }
 
 .gallery-image {
@@ -847,11 +1039,19 @@ body.lightbox-open {
   cursor: pointer;
   opacity: 0.8;
   border: 2px solid transparent;
+  transition: opacity 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
 }
 
 .gallery-thumb:hover {
   opacity: 1;
   border-color: var(--emerald);
+  transform: scale(1.05);
+}
+
+.gallery-thumb.active {
+  opacity: 1;
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.3);
 }
 
 .existing-image-tile img {

@@ -76,6 +76,90 @@
             <textarea asp-for="Description" rows="6" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger small"></span>
         </div>
+        <div class="col-12">
+            <h2 class="h5 text-emerald mt-3">Спецификации</h2>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="SpecEngine" class="form-label"></label>
+            <input asp-for="SpecEngine" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="SpecPower" class="form-label"></label>
+            <input asp-for="SpecPower" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="SpecEconomy" class="form-label"></label>
+            <input asp-for="SpecEconomy" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="SpecTransmission" class="form-label"></label>
+            <input asp-for="SpecTransmission" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="SpecExterior" class="form-label"></label>
+            <input asp-for="SpecExterior" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="SpecInterior" class="form-label"></label>
+            <input asp-for="SpecInterior" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="SpecAssist" class="form-label"></label>
+            <input asp-for="SpecAssist" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="SpecConnectivity" class="form-label"></label>
+            <input asp-for="SpecConnectivity" class="form-control" />
+        </div>
+
+        <div class="col-12 mt-3">
+            <h2 class="h5 text-emerald">История и поддръжка</h2>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="History1Title" class="form-label"></label>
+            <input asp-for="History1Title" class="form-control" />
+            <label asp-for="History1Subtitle" class="form-label mt-2"></label>
+            <input asp-for="History1Subtitle" class="form-control" />
+            <label asp-for="History1Date" class="form-label mt-2"></label>
+            <input asp-for="History1Date" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="History2Title" class="form-label"></label>
+            <input asp-for="History2Title" class="form-control" />
+            <label asp-for="History2Subtitle" class="form-label mt-2"></label>
+            <input asp-for="History2Subtitle" class="form-control" />
+            <label asp-for="History2Date" class="form-label mt-2"></label>
+            <input asp-for="History2Date" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="History3Title" class="form-label"></label>
+            <input asp-for="History3Title" class="form-control" />
+            <label asp-for="History3Subtitle" class="form-label mt-2"></label>
+            <input asp-for="History3Subtitle" class="form-control" />
+            <label asp-for="History3Date" class="form-label mt-2"></label>
+            <input asp-for="History3Date" class="form-control" />
+        </div>
+
+        <div class="col-12 mt-3">
+            <h2 class="h5 text-emerald">Инспекция и състояние</h2>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Condition1" class="form-label"></label>
+            <input asp-for="Condition1" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Condition2" class="form-label"></label>
+            <input asp-for="Condition2" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Condition3" class="form-label"></label>
+            <input asp-for="Condition3" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Condition4" class="form-label"></label>
+            <input asp-for="Condition4" class="form-control" />
+        </div>
+
         <div class="col-12 d-flex justify-content-between align-items-center">
             <a asp-action="MyListings" class="btn btn-outline-light">Отказ</a>
             <button type="submit" class="btn btn-emerald btn-lg">Запази промените</button>

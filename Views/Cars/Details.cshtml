@@ -6,24 +6,72 @@
     var galleryImages = Model.Images?.OrderBy(image => image.SortOrder).ToList() ?? new List<CarImage>();
     var mainImageId = $"gallery-main-{Model.Id}";
 
-    var specRows = new Dictionary<string, string>
+    var specRows = new Dictionary<string, string?>
     {
-        ["Двигател"] = "3.0L Twin-Turbo · 4х4 · Performance настройка",
-        ["Мощност"] = "456 к.с. / 520 Nm",
-        ["Разход"] = "10.2 л / 100 км комбиниран",
-        ["Трансмисия"] = "8-степенен автоматик с пера",
-        ["Екстериор"] = "Obsidian Black · Керамично фолио",
-        ["Интериор"] = "Премиум кожа · Амбиентно осветление",
-        ["Асистенти"] = "Адаптивен круиз · Лентов асистент · 360° камери",
-        ["Свързаност"] = "CarPlay · Android Auto · OTA актуализации"
-    };
+        ["Двигател"] = Model.SpecEngine,
+        ["Мощност"] = Model.SpecPower,
+        ["Разход"] = Model.SpecEconomy,
+        ["Трансмисия"] = Model.SpecTransmission,
+        ["Екстериор"] = Model.SpecExterior,
+        ["Интериор"] = Model.SpecInterior,
+        ["Асистенти"] = Model.SpecAssist,
+        ["Свързаност"] = Model.SpecConnectivity
+    }
+    .Where(pair => !string.IsNullOrWhiteSpace(pair.Value))
+    .ToList();
 
-    var ownershipTimeline = new[]
+    if (!specRows.Any())
     {
-        new { Title = "Инспекция CarBuySel", Subtitle = "Няма грешки · батерия 92%", Date = "Q4 2024" },
-        new { Title = "Сертифициран сервиз", Subtitle = "Спирачна течност + гуми подменени", Date = "Q3 2024" },
-        new { Title = "Първи собственик (корп.)", Subtitle = "Лизинг за изпълнителен автопарк", Date = "Q2 2023" }
-    };
+        specRows = new Dictionary<string, string?>
+        {
+            ["Двигател"] = "3.0L Twin-Turbo · 4х4 · Performance настройка",
+            ["Мощност"] = "456 к.с. / 520 Nm",
+            ["Разход"] = "10.2 л / 100 км комбиниран",
+            ["Трансмисия"] = "8-степенен автоматик с пера",
+            ["Екстериор"] = "Obsidian Black · Керамично фолио",
+            ["Интериор"] = "Премиум кожа · Амбиентно осветление",
+            ["Асистенти"] = "Адаптивен круиз · 360° камери",
+            ["Свързаност"] = "CarPlay · Android Auto · OTA актуализации"
+        }.ToList();
+    }
+
+    var ownershipTimeline = new List<(string? Title, string? Subtitle, string? Date)>
+    {
+        (Model.History1Title, Model.History1Subtitle, Model.History1Date),
+        (Model.History2Title, Model.History2Subtitle, Model.History2Date),
+        (Model.History3Title, Model.History3Subtitle, Model.History3Date)
+    }
+    .Where(entry => !string.IsNullOrWhiteSpace(entry.Title) || !string.IsNullOrWhiteSpace(entry.Subtitle) || !string.IsNullOrWhiteSpace(entry.Date))
+    .ToList();
+
+    if (!ownershipTimeline.Any())
+    {
+        ownershipTimeline = new List<(string? Title, string? Subtitle, string? Date)>
+        {
+            ("Инспекция CarBuySell", "Няма грешки · батерия 92%", "Q4 2024"),
+            ("Сертифициран сервиз", "Спирачна течност + гуми подменени", "Q3 2024"),
+            ("Първи собственик (корп.)", "Лизинг за изпълнителен автопарк", "Q2 2023")
+        };
+    }
+
+    var conditionItems = new List<string?>
+    {
+        Model.Condition1,
+        Model.Condition2,
+        Model.Condition3,
+        Model.Condition4
+    }.Where(item => !string.IsNullOrWhiteSpace(item)).ToList();
+
+    if (!conditionItems.Any())
+    {
+        conditionItems = new List<string?>
+        {
+            "✔ Пълно PPF покритие по купето",
+            "✔ Гуми > 6 мм · балансирани",
+            "✔ Филтър купе + батерия проверени",
+            "✔ Няма активни кампании"
+        };
+    }
 
     var recommendedVehicles = new[]
     {
@@ -44,19 +92,41 @@
                      class="gallery-main__img"
                      alt="Основна снимка на @Model.Title"
                      data-gallery="listing"
-                     data-full="@Url.Content(hero.Path)" />
+                     data-full="@Url.Content(hero.Path)"
+                     data-gallery-index="0" />
+                @if (galleryImages.Count > 1)
+                {
+                    <button type="button"
+                            class="gallery-nav gallery-nav--prev"
+                            data-gallery-nav
+                            data-direction="prev"
+                            data-target="@mainImageId"
+                            aria-label="Предишна снимка">
+                        ‹
+                    </button>
+                    <button type="button"
+                            class="gallery-nav gallery-nav--next"
+                            data-gallery-nav
+                            data-direction="next"
+                            data-target="@mainImageId"
+                            aria-label="Следваща снимка">
+                        ›
+                    </button>
+                }
             </div>
             @if (galleryImages.Count > 1)
             {
                 <div class="gallery-thumbs mt-3">
-                    @foreach (var image in galleryImages)
+                    @for (var index = 0; index < galleryImages.Count; index++)
                     {
+                        var image = galleryImages[index];
                         <img src="@Url.Content(image.Path)"
                              class="gallery-thumb"
                              alt="Thumbnail of @Model.Title"
                              data-gallery="listing"
                              data-full="@Url.Content(image.Path)"
-                             data-gallery-thumb-for="@mainImageId" />
+                             data-gallery-thumb-for="@mainImageId"
+                             data-gallery-index="@index" />
                     }
                 </div>
             }
@@ -111,17 +181,24 @@
                 <h2 class="h4 mb-0">Данни за автомобила</h2>
             </div>
         </div>
-        <table class="spec-table">
-            <tbody>
-                @foreach (var spec in specRows)
-                {
-                    <tr>
-                        <th scope="row">@spec.Key</th>
-                        <td>@spec.Value</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @if (specRows.Any())
+        {
+            <table class="spec-table">
+                <tbody>
+                    @foreach (var spec in specRows)
+                    {
+                        <tr>
+                            <th scope="row">@spec.Key</th>
+                            <td>@spec.Value</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted mb-0">Все още няма въведени спецификации.</p>
+        }
     </div>
 
     <div class="glass-card history-card">
@@ -131,19 +208,26 @@
                 <h2 class="h4 mb-0">Проследяване и поддръжка</h2>
             </div>
         </div>
-        <div class="history-timeline">
-            @foreach (var eventItem in ownershipTimeline)
-            {
-                <div class="history-step">
-                    <span class="history-step__dot"></span>
-                    <div>
-                        <strong>@eventItem.Title</strong>
-                        <p class="text-muted mb-1">@eventItem.Subtitle</p>
-                        <span class="history-step__date">@eventItem.Date</span>
+        @if (ownershipTimeline.Any())
+        {
+            <div class="history-timeline">
+                @foreach (var eventItem in ownershipTimeline)
+                {
+                    <div class="history-step">
+                        <span class="history-step__dot"></span>
+                        <div>
+                            <strong>@eventItem.Title</strong>
+                            <p class="text-muted mb-1">@eventItem.Subtitle</p>
+                            <span class="history-step__date">@eventItem.Date</span>
+                        </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted mb-0">Няма добавена история.</p>
+        }
     </div>
 
     <div class="glass-card condition-card">
@@ -153,12 +237,19 @@
                 <h2 class="h4 mb-0">Акценти от инспекция</h2>
             </div>
         </div>
-        <ul class="condition-list">
-            <li>✔ Пълно PPF покритие по купето</li>
-            <li>✔ Гуми &gt; 6 мм протектор · балансирани и регулирани</li>
-            <li>✔ Филтър купе + батерия проверени</li>
-            <li>✔ Няма отворени сервизни кампании или щети</li>
-        </ul>
+        @if (conditionItems.Any())
+        {
+            <ul class="condition-list">
+                @foreach (var item in conditionItems)
+                {
+                    <li>✔ @item</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted mb-0">Добавете кратко описание на състоянието, когато редактирате обявата.</p>
+        }
     </div>
 </section>
 

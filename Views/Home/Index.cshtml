@@ -1,6 +1,6 @@
 ﻿@using System.Collections.Generic
 @{
-    ViewData["Title"] = "CarBuySel";
+    ViewData["Title"] = "CarBuySell";
 
     var categories = new[] { "SUV", "Седан", "Електрически", "Луксозни", "Хибрид", "Перформанс" };
 
@@ -158,7 +158,7 @@
     <div class="trust-panel__card glass-card">
         <p class="eyebrow text-emerald">Доверие</p>
         <h2 class="h4">Шофьорите ни оценяват с 4.9/5</h2>
-        <p class="text-muted mb-4">От електромобили до класики – CarBuySel поема сложното и ви оставя само удоволствието.</p>
+        <p class="text-muted mb-4">От електромобили до класики – <span class="text-light">Car</span><span class="text-emerald">Buy</span><span class="text-danger">Sell</span> поема сложното и ви оставя само удоволствието.</p>
         <div class="logo-row">
             @foreach (var partner in partners)
             {

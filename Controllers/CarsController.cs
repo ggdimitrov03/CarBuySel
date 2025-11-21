@@ -123,7 +123,28 @@ public class CarsController : Controller
             Price = input.Price,
             Description = input.Description,
             OwnerId = user.Id,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            SpecEngine = input.SpecEngine,
+            SpecPower = input.SpecPower,
+            SpecEconomy = input.SpecEconomy,
+            SpecTransmission = input.SpecTransmission,
+            SpecExterior = input.SpecExterior,
+            SpecInterior = input.SpecInterior,
+            SpecAssist = input.SpecAssist,
+            SpecConnectivity = input.SpecConnectivity,
+            History1Title = input.History1Title,
+            History1Subtitle = input.History1Subtitle,
+            History1Date = input.History1Date,
+            History2Title = input.History2Title,
+            History2Subtitle = input.History2Subtitle,
+            History2Date = input.History2Date,
+            History3Title = input.History3Title,
+            History3Subtitle = input.History3Subtitle,
+            History3Date = input.History3Date,
+            Condition1 = input.Condition1,
+            Condition2 = input.Condition2,
+            Condition3 = input.Condition3,
+            Condition4 = input.Condition4
         };
 
         for (var index = 0; index < uploads.Count; index++)
@@ -200,6 +221,27 @@ public class CarsController : Controller
             Year = listing.Year,
             Price = listing.Price,
             Description = listing.Description,
+            SpecEngine = listing.SpecEngine,
+            SpecPower = listing.SpecPower,
+            SpecEconomy = listing.SpecEconomy,
+            SpecTransmission = listing.SpecTransmission,
+            SpecExterior = listing.SpecExterior,
+            SpecInterior = listing.SpecInterior,
+            SpecAssist = listing.SpecAssist,
+            SpecConnectivity = listing.SpecConnectivity,
+            History1Title = listing.History1Title,
+            History1Subtitle = listing.History1Subtitle,
+            History1Date = listing.History1Date,
+            History2Title = listing.History2Title,
+            History2Subtitle = listing.History2Subtitle,
+            History2Date = listing.History2Date,
+            History3Title = listing.History3Title,
+            History3Subtitle = listing.History3Subtitle,
+            History3Date = listing.History3Date,
+            Condition1 = listing.Condition1,
+            Condition2 = listing.Condition2,
+            Condition3 = listing.Condition3,
+            Condition4 = listing.Condition4,
             ExistingImages = listing.Images
                 .OrderBy(image => image.SortOrder)
                 .Select(image => new ExistingImageViewModel
@@ -259,6 +301,27 @@ public class CarsController : Controller
         listing.Year = input.Year;
         listing.Price = input.Price;
         listing.Description = input.Description;
+        listing.SpecEngine = input.SpecEngine;
+        listing.SpecPower = input.SpecPower;
+        listing.SpecEconomy = input.SpecEconomy;
+        listing.SpecTransmission = input.SpecTransmission;
+        listing.SpecExterior = input.SpecExterior;
+        listing.SpecInterior = input.SpecInterior;
+        listing.SpecAssist = input.SpecAssist;
+        listing.SpecConnectivity = input.SpecConnectivity;
+        listing.History1Title = input.History1Title;
+        listing.History1Subtitle = input.History1Subtitle;
+        listing.History1Date = input.History1Date;
+        listing.History2Title = input.History2Title;
+        listing.History2Subtitle = input.History2Subtitle;
+        listing.History2Date = input.History2Date;
+        listing.History3Title = input.History3Title;
+        listing.History3Subtitle = input.History3Subtitle;
+        listing.History3Date = input.History3Date;
+        listing.Condition1 = input.Condition1;
+        listing.Condition2 = input.Condition2;
+        listing.Condition3 = input.Condition3;
+        listing.Condition4 = input.Condition4;
 
         if (imagesToRemove.Count > 0)
         {

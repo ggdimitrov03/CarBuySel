@@ -129,7 +129,60 @@
     document.body.classList.remove("lightbox-open");
   };
 
+  const changeGalleryImage = (target, newSrc, newIndex, targetId) => {
+    if (!target || !newSrc) return;
+    
+    // Fade out
+    target.classList.add("fade-out");
+    target.classList.remove("fade-in");
+    
+    // Update active thumbnail
+    if (targetId) {
+      const thumbsForGallery = document.querySelectorAll(
+        `[data-gallery-thumb-for="${targetId}"]`
+      );
+      thumbsForGallery.forEach(thumb => thumb.classList.remove("active"));
+      const activeThumb = Array.from(thumbsForGallery).find(
+        thumb => thumb.dataset.galleryIndex === newIndex?.toString()
+      );
+      if (activeThumb) {
+        activeThumb.classList.add("active");
+      }
+    }
+    
+    // Change image after fade out starts
+    setTimeout(() => {
+      target.setAttribute("src", newSrc);
+      target.dataset.full = newSrc;
+      if (newIndex !== undefined) {
+        target.dataset.galleryIndex = newIndex.toString();
+      }
+      
+      // Fade in
+      requestAnimationFrame(() => {
+        target.classList.remove("fade-out");
+        target.classList.add("fade-in");
+      });
+    }, 200); // Half of the transition duration
+  };
+
   const initGallery = () => {
+    // Initialize active thumbnail for each gallery
+    document.querySelectorAll("[data-gallery-index]").forEach((mainImg) => {
+      const targetId = mainImg.id;
+      const currentIndex = mainImg.dataset.galleryIndex ?? "0";
+      const thumbsForGallery = document.querySelectorAll(
+        `[data-gallery-thumb-for="${targetId}"]`
+      );
+      thumbsForGallery.forEach(thumb => {
+        if (thumb.dataset.galleryIndex === currentIndex) {
+          thumb.classList.add("active");
+        }
+      });
+      // Ensure initial image has fade-in class
+      mainImg.classList.add("fade-in");
+    });
+
     const thumbs = document.querySelectorAll("[data-gallery-thumb-for]");
     thumbs.forEach((thumb) => {
       const targetId = thumb.getAttribute("data-gallery-thumb-for");
@@ -139,8 +192,8 @@
       thumb.addEventListener("click", () => {
         const full = thumb.dataset.full || thumb.getAttribute("src");
         if (!full) return;
-        target.setAttribute("src", full);
-        target.dataset.full = full;
+        const thumbIndex = thumb.dataset.galleryIndex;
+        changeGalleryImage(target, full, thumbIndex, targetId);
       });
     });
 
@@ -163,6 +216,40 @@
       if (event.key === "Escape") {
         closeLightbox();
       }
+    });
+
+    document.querySelectorAll("[data-gallery-nav]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        const targetId = button.getAttribute("data-target");
+        const direction = button.getAttribute("data-direction") ?? "next";
+        const target = document.getElementById(targetId);
+        if (!target) return;
+
+        const thumbsForGallery = document.querySelectorAll(
+          `[data-gallery-thumb-for="${targetId}"]`
+        );
+        if (!thumbsForGallery.length) return;
+
+        const currentIndex = Number(target.dataset.galleryIndex ?? "0");
+        const maxIndex = thumbsForGallery.length;
+        let nextIndex = currentIndex;
+
+        if (direction === "prev") {
+          nextIndex = (currentIndex - 1 + maxIndex) % maxIndex;
+        } else {
+          nextIndex = (currentIndex + 1) % maxIndex;
+        }
+
+        const nextThumb = thumbsForGallery[nextIndex];
+        if (nextThumb) {
+          const full = nextThumb.dataset.full || nextThumb.getAttribute("src");
+          const thumbIndex = nextThumb.dataset.galleryIndex;
+          changeGalleryImage(target, full, thumbIndex, targetId);
+        }
+      });
     });
   };
 
